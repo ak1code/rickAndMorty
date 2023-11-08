@@ -1,0 +1,87 @@
+*{
+    margin: 0%;
+    padding: 0%;
+    
+}
+
+nav{
+    display: flex;
+    justify-content: space-around;
+    background-color: #7b7b7b;
+    height: 50px;
+    align-items: center;
+     
+}
+
+.navlink{
+    text-decoration: none;
+}
+
+#loginForm{
+    /* border: 1px solid red; */
+    display: flex;
+    flex-direction:column;
+    width: 35%;
+    margin: auto;
+    margin-top: 20px;
+}
+
+#loginForm>Input{
+    margin: 10px 0px 10px 0px;
+    height: 20px;
+}
+
+
+
+#form{
+    align-items: center;
+    /* border: 1px solid blue; */
+    /* margin-left: 30%; */
+}
+.input{
+    /* border: 1px solid red;  */
+    margin-bottom: 25px;
+}
+
+
+#form>input{
+    margin: 10px;
+}
+
+.button{
+    width: 50%;
+    margin: auto;
+}
+
+#loginMain{
+    margin-top: 20px;
+    align-items: center;
+
+    /* border: 1px solid red; */
+}
+
+#link{
+    text-align: center;
+    margin-top: 20px;
+}
+.heading{
+   text-align: center;
+}
+.movieCard{
+    /* width: 60%; */
+    height: 450px;
+    text-align: center;
+    margin: 10px;
+    border: 1px solid red;
+    background-color: #e9dede;
+    border-radius: 5px;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+
+
+
+#cart{
+    display: flex;
+    flex-direction: column;
+    margin: 10px;
+}
