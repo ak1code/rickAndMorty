@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
 
 const initialState={
     movieData:[],
@@ -7,8 +6,6 @@ const initialState={
     error:null,
     isAuth:false
 }
-
-
 
 const movieSlice=createSlice({
     name:"movies",
@@ -28,10 +25,8 @@ const movieSlice=createSlice({
         },
         authorization:(state,action)=>{
             state.isAuth=action.payload
-        }
-           
+        }     
     }
-   
 })
 
 export {movieSlice}

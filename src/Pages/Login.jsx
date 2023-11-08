@@ -1,5 +1,5 @@
-import axios from 'axios';
-import React, { useState } from 'react'
+
+import React, { Suspense, lazy, useState } from 'react'
 import { useForm } from "react-hook-form"
 import { Link } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom';
@@ -7,6 +7,8 @@ import { UserOutlined,MailOutlined } from '@ant-design/icons';
 import { Input,Button } from 'antd';
 import { useDispatch } from 'react-redux';
 import { authorization } from '../Redux/MovieSlice';
+import MultiStepForm from '../MultiStepForm/Personalform';
+
 
 
 const Login = () => {
@@ -20,13 +22,14 @@ const Login = () => {
         register,
         handleSubmit,
         watch,
+        reset,
         formState:{errors}
       } = useForm()
    
        
       const onSubmitSingUp = (data) => {
-            
-        if (data.password !== data.confirmPassword) {
+           
+        if (data.SingUppassword !== data.SingUpconfirmPassword) {
           alert('Passwords do not match');
           return;
         }
@@ -44,13 +47,17 @@ const Login = () => {
             localStorage.setItem("user",JSON.stringify(existingUser));
             console.log("user registered",newUser)
             setShowLogin(false)
-
+            
+           reset()
       }
 
      const onSubmitLogin=(data)=>{
+    
            const existingUser=JSON.parse(localStorage.getItem("user"));
 
-         const user=  existingUser.find((el)=>el.email==data.email && el.password==data.password);
+        //  const user=  existingUser.find((el)=>el.SingUpemail==data.email && el.SingUppassword==data.password);
+
+        const user = existingUser.find((el) => el.email === data.email && el.password === data.password)
 
           if(user){
              alert("login succefull")
@@ -59,10 +66,13 @@ const Login = () => {
           }else{
              alert("wrong credential")
           }
+          console.log(data)
+          reset()
      }
 
       const handleLogin=()=>{
           setShowLogin(!showLogin)
+          reset()
       }
 
       
@@ -80,11 +90,11 @@ const Login = () => {
             <label>UserName:</label>
             <input className='input' type='text' size="large" prefix={<UserOutlined />} name='username' placeholder="UserName" {...register("username", { required: true })} />
              <label>Email:</label>
-            <input className='input' type='text' size='large' prefix={<MailOutlined />}  name='email' placeholder="Email"  {...register("email", { required: true })}  />
+            <input className='input' type='text' size='large' prefix={<MailOutlined />}  name='SingUpemail' placeholder="Email"  {...register("email", { required: true })}  />
             <label>Password:</label>
             <input className='input' type='password' size="large" name="password" placeholder="Password"  {...register("password", { required: true,minLength:4 })} />
             <label>Confirm Password:</label>
-            <input className='input' type='password' size="large" name='confirmPassword' placeholder="Confirm Password"  {...register("confirmPassword", { required: true,minLength:4 })}  />
+            <input className='input' type='password' size="large" name='setPassword' placeholder="Confirm Password"  {...register("setPassword", { required: true,minLength:4 })}  />
             
            
 
@@ -112,6 +122,7 @@ const Login = () => {
            </Link>
            
            </div>
+              {/* <MultiStepForm/> */}
           </div>
     </div>
   )

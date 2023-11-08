@@ -31,6 +31,12 @@ nav{
     height: 20px;
 }
 
+#loading{
+    display: flex;
+    justify-content: center;
+    margin: auto;
+    align-items: center;
+}
 
 
 #form{
@@ -69,7 +75,7 @@ nav{
 }
 .movieCard{
     /* width: 60%; */
-    height: 450px;
+    height: 500px;
     text-align: center;
     margin: 10px;
     border: 1px solid red;
@@ -78,6 +84,15 @@ nav{
     box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 }
 
+.productDetail{
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    background-color:#e9dede ;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    margin: auto;
+    width: 50%;
+}
 
 
 #cart{

@@ -5,6 +5,9 @@ import { Col, Divider, Row,Button } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { getMovie, loading,error, reload } from '../Redux/MovieSlice';
 import {Suspense, lazy} from "react"
+import LoaderComp from './LoaderComp';
+
+
 
 
 const Movies = () => {
@@ -15,18 +18,13 @@ const Movies = () => {
   
   const dispatch=useDispatch();
   const movies=useSelector((state)=>state.movie.movieData);
-  const loading1=useSelector((state)=>state.movie.loading);
+  const loadingMovie=useSelector((state)=>state.movie.loading);
   console.log(movies)
-  console.log(loading1)
-
-    
-  
+  console.log(loadingMovie)
 
 
   useEffect(()=>{
-
     GetData()
-   
   },[page]);
 
   useEffect(()=>{
@@ -34,8 +32,6 @@ const Movies = () => {
   },[])
   
   
-
-
   const GetData=async()=>{
       dispatch(loading(true))
       try {
@@ -51,13 +47,8 @@ const Movies = () => {
          dispatch(loading(false))
          dispatch(error)
       }
-     
-    
   }
 
- 
-  
-  // console.log(data)
 
   const handleInfiniteScroll=async()=>{
     // console.log("scroll height"+ document.documentElement.scrollHeight)
@@ -77,33 +68,25 @@ const Movies = () => {
      return ()=>window.removeEventListener("scroll",handleInfiniteScroll)
   })
 
-  const handlePre=()=>{
-    if(page>1){
-      setPage((pre)=>pre-1)
-    
-    }
-  }
-
-  const handleNext=()=>{
-     setPage((pre)=>pre+1)
   
-  }
-
- 
    
   return (
     <div>
       <h1 className='heading'>Movies</h1>
+      {
+        loadingMovie && <LoaderComp/>
+      }
       <Row >
       {
         movies?.map((item,index)=>(
           <Col className="gutter-row"  span={6} key={index}>
+            <Suspense fallback={<h1>Loading</h1>}>
           <MovieCart  {...item} />
+            </Suspense>
           </Col>
         ))
       }
       </Row>
-      <Button onClick={handlePre} >Pre</Button>{page}<Button onClick={handleNext}>Next</Button>
     </div>
   )
 }
@@ -113,16 +96,4 @@ const Movies = () => {
 export default Movies
 
 
-// import React from 'react';
-// import { Suspense } from 'react';
-// import LazyMovies from './LazyMovies';
 
-// const Movies = () => {
-//   return (
-//     <Suspense fallback={<div>Loading...</div>}>
-//       <LazyMovies />
-//     </Suspense>
-//   );
-// };
-
-// export default Movies;
