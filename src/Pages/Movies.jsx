@@ -3,9 +3,11 @@ import React, { useEffect, useState } from 'react'
 import MovieCart from '../Componant/MovieCard';
 import { Col, Divider, Row,Button } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
-import { getMovie, loading,error, reload } from '../Redux/MovieSlice';
+import { getMovie, loading,error, reload, removeCheckedMovie, resetData } from '../Redux/MovieSlice';
 import {Suspense, lazy} from "react"
 import LoaderComp from './LoaderComp';
+import { movetofav } from '../Redux/FavoriteSlice';
+import { useNavigate } from 'react-router-dom';
 
 
 
@@ -14,39 +16,61 @@ const Movies = () => {
 
   const [data,setData]=useState([]);
   const [page,setPage]=useState(1);
- 
+  const [first, setFirst] = useState(false);
+  const navigate=useNavigate();
   
   const dispatch=useDispatch();
   const movies=useSelector((state)=>state.movie.movieData);
+  const favData=useSelector((state)=>state.favorite.favorite);
+  console.log("favdata",favData)
   const loadingMovie=useSelector((state)=>state.movie.loading);
+  const checkbox=useSelector((state)=>state.favorite.checkbox);
+  
+
   console.log(movies)
   console.log(loadingMovie)
-
+console.log("checkbox",checkbox)
 
   useEffect(()=>{
-    GetData()
+   
+      GetData()
+    
   },[page]);
 
-  useEffect(()=>{
-    dispatch(reload())
-  },[])
   
   
+  console.log("movie length",movies.length)
   const GetData=async()=>{
       dispatch(loading(true))
-      try {
-        let res=await axios.get(`https://rickandmortyapi.com/api/character?page=${page}`)
-          setData((pre)=>[...pre,...res.data.results] );
-           
-         dispatch(getMovie(res.data.results))
+        try {
+          let res=await axios.get(`https://rickandmortyapi.com/api/character?page=${page}`)
+            setData((pre)=>[...pre,...res.data.results] );
+             let apidata=res.data.results;
+              
+            apidata= apidata.map((item)=>{
+                return {...item,isCheck:false}
+            })
+             console.log("finaldata.........",apidata)
 
-          dispatch(loading(false))
-           
-      } catch (err) {
-         console.log(err)
-         dispatch(loading(false))
-         dispatch(error)
-      }
+             const filterID = new Set(favData.map(obj => obj.id));
+             let MovieID=new Set(movies.map(obj=>obj.id));
+
+             const uniqueItems = apidata.filter(obj => !filterID.has(obj.id));
+
+            
+              const final=uniqueItems.filter(obj=>!MovieID.has(obj.id));
+              
+
+           dispatch(getMovie(final))
+  
+            dispatch(loading(false))
+             
+        } catch (err) {
+           console.log(err)
+           dispatch(loading(false))
+           dispatch(error)
+        }
+      
   }
 
 
@@ -68,11 +92,30 @@ const Movies = () => {
      return ()=>window.removeEventListener("scroll",handleInfiniteScroll)
   })
 
+  const moveFavorite=()=>{
+     
+     let favID=new Set(favData.map((obj)=>obj.id));
+     const uniqueItems = checkbox.filter(obj => !favID.has(obj.id));
+     console.log("id of favrite",uniqueItems)
+      dispatch(movetofav(uniqueItems));
+
+      const CheckID = new Set(checkbox.map(obj => obj.id));
+
+      const postItems=movies.filter(obj=>!CheckID.has(obj.id));
+        
+       dispatch(removeCheckedMovie(postItems))
+      
+      console.log("final movie list")
+        
+      dispatch(resetData())
+
+  }
   
    
   return (
     <div>
       <h1 className='heading'>Movies</h1>
+      {checkbox.length!==0 && <Button onClick={moveFavorite}>add to favorite</Button>}
       {
         loadingMovie && <LoaderComp/>
       }
@@ -81,7 +124,7 @@ const Movies = () => {
         movies?.map((item,index)=>(
           <Col className="gutter-row"  span={6} key={index}>
             <Suspense fallback={<h1>Loading</h1>}>
-          <MovieCart  {...item} />
+          <MovieCart  {...item}  />
             </Suspense>
           </Col>
         ))

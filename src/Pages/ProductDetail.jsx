@@ -59,7 +59,7 @@ const ProductDetail = () => {
         <Text>Species:-{data.species}</Text>
         </Space>
         {
-            favproduct.length==0? (<Button onClick={()=>addFavorite(data)}>Add to fav</Button>):(<Button onClick={()=>dispatch(removeFavorite(data.id))}>Remove from Fav</Button>)
+            favproduct.length==0? (<Button onClick={()=>dispatch(addFavorite(data))}>Add to fav</Button>):(<Button onClick={()=>dispatch(removeFavorite(data.id))}>Remove from Fav</Button>)
         }
         
         </div>

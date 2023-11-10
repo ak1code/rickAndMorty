@@ -17,11 +17,36 @@ nav{
     text-decoration: none;
 }
 
+#favbutton{
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+    gap:10px
+    /* border: 1px solid red; */
+}
+
+#fav{
+    margin-left: 10px;
+    /* color: red; */
+   width: 50px;
+   height: 40px;
+   fill: red;
+   /* border: 1px solid red; */
+    
+}
+
+#fav1{
+    margin-left: 10px;
+    width: 50px;
+    height: 40px;
+}
+
 #loginForm{
     /* border: 1px solid red; */
     display: flex;
     flex-direction:column;
-    width: 35%;
+    width: 30%;
     margin: auto;
     margin-top: 20px;
 }
@@ -100,3 +125,4 @@ nav{
     flex-direction: column;
     margin: 10px;
 }
+

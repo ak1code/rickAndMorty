@@ -1,5 +1,5 @@
 
-import React, { Suspense, lazy, useState } from 'react'
+import React, { Suspense, lazy, useEffect, useState } from 'react'
 import { useForm } from "react-hook-form"
 import { Link } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom';
@@ -8,6 +8,7 @@ import { Input,Button } from 'antd';
 import { useDispatch } from 'react-redux';
 import { authorization } from '../Redux/MovieSlice';
 import MultiStepForm from '../MultiStepForm/Personalform';
+import axios from 'axios';
 
 
 
@@ -17,6 +18,7 @@ const Login = () => {
     const [data,setData]=useState([]);
     const navigate=useNavigate()
     const dispatch=useDispatch();
+    const [isLoggedIn, setIsLoggedIn] = useState(false)
 
     const {
         register,
@@ -25,10 +27,16 @@ const Login = () => {
         reset,
         formState:{errors}
       } = useForm()
-   
-       
+    
+      useEffect(() => {
+        const isLoggedIn = localStorage.getItem('isLoggedIn');
+        if (isLoggedIn === 'true') {
+          setIsLoggedIn(true);
+        }
+      }, []);
+
       const onSubmitSingUp = (data) => {
-           
+        
         if (data.SingUppassword !== data.SingUpconfirmPassword) {
           alert('Passwords do not match');
           return;
@@ -52,7 +60,7 @@ const Login = () => {
       }
 
      const onSubmitLogin=(data)=>{
-    
+      
            const existingUser=JSON.parse(localStorage.getItem("user"));
 
         //  const user=  existingUser.find((el)=>el.SingUpemail==data.email && el.SingUppassword==data.password);
@@ -60,7 +68,9 @@ const Login = () => {
         const user = existingUser.find((el) => el.email === data.email && el.password === data.password)
 
           if(user){
-             alert("login succefull")
+            //  alert("login succefull")
+            setIsLoggedIn(true);
+            localStorage.setItem('isLoggedIn', 'true');
             navigate("/movies")
             dispatch(authorization(true))
           }else{
@@ -74,8 +84,9 @@ const Login = () => {
           setShowLogin(!showLogin)
           reset()
       }
+   
 
-      
+    
         
       
 
