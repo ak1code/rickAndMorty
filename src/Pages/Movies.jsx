@@ -16,20 +16,17 @@ const Movies = () => {
 
   const [data,setData]=useState([]);
   const [page,setPage]=useState(1);
-  const [first, setFirst] = useState(false);
+  
   const navigate=useNavigate();
   
   const dispatch=useDispatch();
   const movies=useSelector((state)=>state.movie.movieData);
   const favData=useSelector((state)=>state.favorite.favorite);
-  console.log("favdata",favData)
   const loadingMovie=useSelector((state)=>state.movie.loading);
   const checkbox=useSelector((state)=>state.favorite.checkbox);
   
 
-  console.log(movies)
-  console.log(loadingMovie)
-console.log("checkbox",checkbox)
+  
 
   useEffect(()=>{
    
@@ -39,7 +36,7 @@ console.log("checkbox",checkbox)
 
   
   
-  console.log("movie length",movies.length)
+  
   const GetData=async()=>{
       dispatch(loading(true))
         try {
@@ -50,18 +47,16 @@ console.log("checkbox",checkbox)
             apidata= apidata.map((item)=>{
                 return {...item,isCheck:false}
             })
-             console.log("finaldata.........",apidata)
+             
 
              const filterID = new Set(favData.map(obj => obj.id));
              let MovieID=new Set(movies.map(obj=>obj.id));
 
              const uniqueItems = apidata.filter(obj => !filterID.has(obj.id));
-
-            
-              const final=uniqueItems.filter(obj=>!MovieID.has(obj.id));
+             const final=uniqueItems.filter(obj=>!MovieID.has(obj.id));
               
 
-           dispatch(getMovie(final))
+            dispatch(getMovie(final))
   
             dispatch(loading(false))
              
@@ -96,18 +91,15 @@ console.log("checkbox",checkbox)
      
      let favID=new Set(favData.map((obj)=>obj.id));
      const uniqueItems = checkbox.filter(obj => !favID.has(obj.id));
-     console.log("id of favrite",uniqueItems)
+    //  console.log("id of favrite",uniqueItems)
       dispatch(movetofav(uniqueItems));
 
       const CheckID = new Set(checkbox.map(obj => obj.id));
 
       const postItems=movies.filter(obj=>!CheckID.has(obj.id));
         
-       dispatch(removeCheckedMovie(postItems))
-      
-      console.log("final movie list")
-        
-      dispatch(resetData())
+       dispatch(removeCheckedMovie(postItems))  
+       dispatch(resetData())
 
   }
   
