@@ -37,31 +37,13 @@ const movieSlice=createSlice({
         },
         check:(state,action)=>{
            
-            //  const find=(obj,action)=>{
-            //      if(obj.id==action.payload){
-            //         return {...obj,isCheck:true}
-            //      }else{
-            //         return {...obj}
-            //      }
-            //  }
-
-            // state.movieData=state.movieData.map((obj)=>find(obj,action))
-
-             const index=state.movieData.findIndex((obj)=>obj.id==action.payload);
-              state.movieData[index]={...state.movieData[index],isCheck:true}
-             console.log("🚀 ~ file: MovieSlice.jsx:50 ~ index:", index)
+            
+            console.log("🚀 ~ file: MovieSlice.jsx:50 ~ action.payload:", action.payload)
+              state.movieData[action.payload].isCheck=true
              
         },
         checkFalse:(state,action)=>{
-           
-            //   const findTrue=(obj,action)=>{
-            //       if(obj.id==action.payload){
-            //         return {...obj,isCheck:false}
-            //       }else{
-            //         return {...obj}
-            //       }
-            //   }
-            // state.movieData=state.movieData.map((obj)=>findTrue(obj,action))
+    
 
             const index=state.movieData.findIndex((obj)=>obj.id==action.payload);
               state.movieData[index]={...state.movieData[index],isCheck:false}

@@ -118,7 +118,7 @@ console.log("movie",movies)
         movies?.map((item,index)=>(
           <Col className="gutter-row"  span={6} key={index}>
             <Suspense fallback={<h1>Loading</h1>}>
-          <MovieCart  {...item} checkRef={checkRef}  />
+          <MovieCart  {...item} checkRef={checkRef} index={index} />
             </Suspense>
           </Col>
         ))

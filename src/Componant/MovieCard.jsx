@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Col, Divider, Row,Image ,Typography, Checkbox, Form} from 'antd';
 import { Button } from 'antd/es/radio';
 import { useDispatch, useSelector } from 'react-redux';
@@ -12,7 +12,8 @@ import { check, checkFalse, removeMovie, resetData } from '../Redux/MovieSlice';
 let checkArray=[];
 
 
-const MovieCart = ({name,image,status,gender,id,isCheck,checkRef}) => {
+const MovieCart = ({name,image,status,gender,id,isCheck,checkRef,index}) => {
+// console.log("🚀 ~ file: MovieCard.jsx:16 ~ MovieCart ~ index:", index)
 
     const dispatch=useDispatch();
     const favorite=useSelector((state)=>state.favorite.favorite);
@@ -51,7 +52,7 @@ const MovieCart = ({name,image,status,gender,id,isCheck,checkRef}) => {
 
          if(e.target.checked==true){
            
-               dispatch(check(id))
+               dispatch(check(index))
                checkArray.push(obj)
                checkRef.current=[...checkArray]
                console.log("current",checkRef);
@@ -64,15 +65,15 @@ const MovieCart = ({name,image,status,gender,id,isCheck,checkRef}) => {
          
       }
       
-    
-  return (
-    <div className='movieCard' > 
-        <Link to={`/productDetail/:${id}`} >
-        <Image preview={false} src={image} />
-        <Typography.Title level={3} >{name}</Typography.Title>
-        <Typography.Title level={5}>Status:{status}</Typography.Title>
-        <Typography.Title level={5}>Gender:{gender}</Typography.Title>
-        </Link>
+     const memorizedContent= useMemo(()=>{
+             
+       return <div className='movieCard' > 
+      <Link to={`/productDetail/:${id}`} >
+      <Image preview={false} src={image} />
+      <Typography.Title level={3} >{name}</Typography.Title>
+      <Typography.Title level={5}>Status:{status}</Typography.Title>
+      <Typography.Title level={5}>Gender:{gender}</Typography.Title>
+      </Link>
         <div id='favbutton'>
         <Button onClick={handleFav}>Add to Favorite</Button>
         {/* {
@@ -82,8 +83,12 @@ const MovieCart = ({name,image,status,gender,id,isCheck,checkRef}) => {
           <Checkbox checked={isCheck} onChange={handleSelect}>{isCheck? "Selected": "Select"}</Checkbox>
       
         </div>
-    </div>
-  )
+     </div>
+     },[name, image, status, gender, id, isCheck])
+
+
+   return ( memorizedContent)
+    
 }
 
 export default MovieCart

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Typography ,Image,Button} from 'antd';
 import "../App.css"
@@ -9,22 +9,24 @@ const Favorite = () => {
      const dispatch=useDispatch();
      console.log(favorite)
 
-    
+    const memorized=useMemo(()=>{
+       return <>{
+        favorite?.map((item)=>{
+             return (<div className='movieCard' key={item.id}>
+                   <Image src={item.image} />
+                   <Typography.Title level={3} >{item.name}</Typography.Title>
+                   <Typography.Title level={5}>Status:{item.status}</Typography.Title>
+                   <Typography.Title level={5}>Gender:{item.gender}</Typography.Title>
+                   <Button onClick={()=>dispatch(removeFavorite(item.id))} >Remove from Favorite</Button>                
+             </div>)    
+        })
+    }</>
+    },[favorite,dispatch])
 
   return (
     <div>
         <Typography.Title level={1}>Favorite</Typography.Title>
-        {
-            favorite?.map((item)=>{
-                 return (<div className='movieCard' key={item.id}>
-                       <Image src={item.image} />
-                       <Typography.Title level={3} >{item.name}</Typography.Title>
-                       <Typography.Title level={5}>Status:{item.status}</Typography.Title>
-                       <Typography.Title level={5}>Gender:{item.gender}</Typography.Title>
-                       <Button onClick={()=>dispatch(removeFavorite(item.id))} >Remove from Favorite</Button>                
-                 </div>)    
-            })
-        }
+         {memorized}
     </div>
   )
 }
