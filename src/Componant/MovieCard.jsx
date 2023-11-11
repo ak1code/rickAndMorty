@@ -2,26 +2,27 @@ import React, { useEffect, useState } from 'react';
 import { Col, Divider, Row,Image ,Typography, Checkbox, Form} from 'antd';
 import { Button } from 'antd/es/radio';
 import { useDispatch, useSelector } from 'react-redux';
-import { addFavorite, checkboxData, removeCheckbox, removeFavorite } from '../Redux/FavoriteSlice';
+import { addFavorite,  removeFavorite } from '../Redux/FavoriteSlice';
 import { Link } from 'react-router-dom';
 import { HeartOutlined } from '@ant-design/icons';
 import { FiHeart } from "react-icons/fi";
-import { check, checkFalse, removeMovie } from '../Redux/MovieSlice';
+import { check, checkFalse, removeMovie, resetData } from '../Redux/MovieSlice';
 // import { CheckboxChangeEvent } from 'antd/es/checkbox';
 
+let checkArray=[];
 
 
-const MovieCart = ({name,image,status,gender,id,isCheck}) => {
+const MovieCart = ({name,image,status,gender,id,isCheck,checkRef}) => {
 
     const dispatch=useDispatch();
     const favorite=useSelector((state)=>state.favorite.favorite);
-    const checkbox=useSelector((state)=>state.favorite.checkbox);
+    // const checkbox=useSelector((state)=>state.favorite.checkbox);
    
 
      const [show,setshow]=useState(false)
      let obj={name,image,status,gender,id,isCheck}
 
-    
+    //  console.log("checkarray",checkArray)
 
 
   
@@ -48,15 +49,20 @@ const MovieCart = ({name,image,status,gender,id,isCheck}) => {
      }
 
       const handleSelect=(e)=>{
-         console.log(e.target.checked,`${id}`)
+        //  console.log(e.target.checked,`${id}`)
+        // dispatch(resetData())
+
          if(e.target.checked==true){
-             dispatch(checkboxData(obj));
-              dispatch(check(id))
-              // dispatch(check(id))
-             console.log(checkbox,"checkbox")
+            //  dispatch(checkboxData(obj));
+               dispatch(check(id))
+               checkArray.push(obj)
+               checkRef.current=[...checkArray]
+               console.log("current",checkRef);
          }else{
-          dispatch(removeCheckbox(id))
-           dispatch(checkFalse(id))
+          // dispatch(removeCheckbox(id))
+           dispatch(checkFalse(id));
+           checkArray=checkArray.filter((obj)=>obj.id!==id);
+             checkRef.current=[...checkArray]
          }
          
       }

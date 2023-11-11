@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import MovieCart from '../Componant/MovieCard';
 import { Col, Divider, Row,Button } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
@@ -7,8 +7,6 @@ import { getMovie, loading,error, reload, removeCheckedMovie, resetData } from '
 import {Suspense, lazy} from "react"
 import LoaderComp from './LoaderComp';
 import { movetofav } from '../Redux/FavoriteSlice';
-import { useNavigate } from 'react-router-dom';
-
 
 
 
@@ -17,16 +15,19 @@ const Movies = () => {
   const [data,setData]=useState([]);
   const [page,setPage]=useState(1);
   
-  const navigate=useNavigate();
   
   const dispatch=useDispatch();
   const movies=useSelector((state)=>state.movie.movieData);
   const favData=useSelector((state)=>state.favorite.favorite);
   const loadingMovie=useSelector((state)=>state.movie.loading);
-  const checkbox=useSelector((state)=>state.favorite.checkbox);
+  
+  const checkRef=useRef();
+   
+  console.log("checkref",checkRef)
+ 
   
 
-  
+console.log("movie",movies)
 
   useEffect(()=>{
    
@@ -89,25 +90,22 @@ const Movies = () => {
 
   const moveFavorite=()=>{
      
-     let favID=new Set(favData.map((obj)=>obj.id));
-     const uniqueItems = checkbox.filter(obj => !favID.has(obj.id));
-    //  console.log("id of favrite",uniqueItems)
-      dispatch(movetofav(uniqueItems));
+        let finalCheck=checkRef.current;
+        dispatch(movetofav(finalCheck));
 
-      const CheckID = new Set(checkbox.map(obj => obj.id));
+        const CheckID = new Set(finalCheck.map(obj => obj.id));
+        const postItems=movies.filter(obj=>!CheckID.has(obj.id));
 
-      const postItems=movies.filter(obj=>!CheckID.has(obj.id));
-        
        dispatch(removeCheckedMovie(postItems))  
        dispatch(resetData())
-
+       checkRef.current=[]
   }
   
    
   return (
     <div>
       <h1 className='heading'>Movies</h1>
-      {checkbox.length!==0 && <Button onClick={moveFavorite}>add to favorite</Button>}
+      {checkRef.current!==undefined && checkRef.current?.length!==0 && <Button onClick={moveFavorite}>add to favorite</Button>}
       {
         loadingMovie && <LoaderComp/>
       }
@@ -116,7 +114,7 @@ const Movies = () => {
         movies?.map((item,index)=>(
           <Col className="gutter-row"  span={6} key={index}>
             <Suspense fallback={<h1>Loading</h1>}>
-          <MovieCart  {...item}  />
+          <MovieCart  {...item} checkRef={checkRef}  />
             </Suspense>
           </Col>
         ))

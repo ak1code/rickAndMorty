@@ -46,7 +46,7 @@ const movieSlice=createSlice({
              }
 
             state.movieData=state.movieData.map((obj)=>find(obj,action))
-            
+             
         },
         checkFalse:(state,action)=>{
            
