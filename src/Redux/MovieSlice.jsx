@@ -37,28 +37,34 @@ const movieSlice=createSlice({
         },
         check:(state,action)=>{
            
-             const find=(obj,action)=>{
-                 if(obj.id==action.payload){
-                    return {...obj,isCheck:true}
-                 }else{
-                    return {...obj}
-                 }
-             }
+            //  const find=(obj,action)=>{
+            //      if(obj.id==action.payload){
+            //         return {...obj,isCheck:true}
+            //      }else{
+            //         return {...obj}
+            //      }
+            //  }
 
-            state.movieData=state.movieData.map((obj)=>find(obj,action))
+            // state.movieData=state.movieData.map((obj)=>find(obj,action))
+
+             const index=state.movieData.findIndex((obj)=>obj.id==action.payload);
+              state.movieData[index]={...state.movieData[index],isCheck:true}
+             console.log("🚀 ~ file: MovieSlice.jsx:50 ~ index:", index)
              
         },
         checkFalse:(state,action)=>{
            
-              const findTrue=(obj,action)=>{
-                  if(obj.id==action.payload){
-                    return {...obj,isCheck:false}
-                  }else{
-                    return {...obj}
-                  }
-              }
+            //   const findTrue=(obj,action)=>{
+            //       if(obj.id==action.payload){
+            //         return {...obj,isCheck:false}
+            //       }else{
+            //         return {...obj}
+            //       }
+            //   }
+            // state.movieData=state.movieData.map((obj)=>findTrue(obj,action))
 
-            state.movieData=state.movieData.map((obj)=>findTrue(obj,action))
+            const index=state.movieData.findIndex((obj)=>obj.id==action.payload);
+              state.movieData[index]={...state.movieData[index],isCheck:false}
         },
         removeCheckedMovie:(state,action)=>{
               state.movieData=[...action.payload]

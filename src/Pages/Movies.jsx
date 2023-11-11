@@ -22,6 +22,7 @@ const Movies = () => {
   const loadingMovie=useSelector((state)=>state.movie.loading);
   
   const checkRef=useRef();
+   console.log("🚀 ~ file: Movies.jsx:25 ~ Movies ~ checkRef:", checkRef)
    
   console.log("checkref",checkRef)
  
@@ -30,10 +31,13 @@ const Movies = () => {
 console.log("movie",movies)
 
   useEffect(()=>{
-   
+     
+    if(page<=42){
       GetData()
+    }
     
   },[page]);
+  console.log("🚀 ~ file: Movies.jsx:40 ~ Movies ~ page:", page)
 
   
   
@@ -109,7 +113,7 @@ console.log("movie",movies)
       {
         loadingMovie && <LoaderComp/>
       }
-      <Row >
+      <Row id='cartDiv' >
       {
         movies?.map((item,index)=>(
           <Col className="gutter-row"  span={6} key={index}>
