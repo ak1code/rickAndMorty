@@ -45,8 +45,8 @@ const movieSlice=createSlice({
         checkFalse:(state,action)=>{
     
 
-            const index=state.movieData.findIndex((obj)=>obj.id==action.payload);
-              state.movieData[index]={...state.movieData[index],isCheck:false}
+            // const index=state.movieData.findIndex((obj)=>obj.id==action.payload);
+              state.movieData[action.payload].isCheck=false
         },
         removeCheckedMovie:(state,action)=>{
               state.movieData=[...action.payload]

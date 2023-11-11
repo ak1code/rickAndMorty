@@ -58,7 +58,7 @@ const MovieCart = ({name,image,status,gender,id,isCheck,checkRef,index}) => {
                console.log("current",checkRef);
          }else{
        
-           dispatch(checkFalse(id));
+           dispatch(checkFalse(index));
            checkArray=checkArray.filter((obj)=>obj.id!==id);
              checkRef.current=[...checkArray]
          }
